@@ -15,18 +15,18 @@ const useUser = () => {
     {
       retry: 0,
       onError: () => {
-        signOut();
+        clearUser();
       },
     }
   );
 
-  const signOut = useCallback(() => {
+  const clearUser = useCallback(() => {
     queryClient.setQueryData(queryKeys.user, null);
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
   }, [queryClient]);
 
-  return { userInfo, signOut };
+  return { userInfo, clearUser };
 };
 
 export default useUser;

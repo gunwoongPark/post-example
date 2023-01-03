@@ -43,6 +43,12 @@ const userApi = {
    */
   updateUser: ({ email, password, username }: UpdateUserReq): Promise<any> =>
     apiBase.patch("/users", { email, password, username }),
+
+  /**
+   * 유저 삭제
+   * @param  {} =>apiBase.delete("/users"
+   */
+  deleteUser: () => apiBase.delete("/users"),
 };
 
 export default userApi;

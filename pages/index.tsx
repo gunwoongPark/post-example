@@ -3,7 +3,7 @@ import Link from "next/link";
 import useUser from "../hooks/react-query/useUser";
 
 const HomePage = () => {
-  const { userInfo, signOut } = useUser();
+  const { userInfo, clearUser } = useUser();
 
   return (
     <>
@@ -14,12 +14,11 @@ const HomePage = () => {
         </>
       ) : (
         <>
-          <button onClick={signOut}>로그아웃</button>
+          <button onClick={() => clearUser()}>로그아웃</button>
           <Link href="/my-page">마이페이지</Link>
         </>
       )}
 
-      <Link href="sign-up">회원가입</Link>
       <Link href="/post">Post</Link>
     </>
   );

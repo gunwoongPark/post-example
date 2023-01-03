@@ -41,6 +41,11 @@ const apiBase = {
     return res.data;
   },
 
+  delete: async (url: string, config?: AxiosRequestConfig<any>) => {
+    const res = await axiosInstance.delete(url, config);
+    return res.data;
+  },
+
   patch: async (url: string, data: any, config?: AxiosRequestConfig<any>) => {
     const res = await axiosInstance.patch(url, data, config);
     return res.data;

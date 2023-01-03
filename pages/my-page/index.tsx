@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import useUser from "../../hooks/react-query/useUser";
@@ -7,9 +9,12 @@ import { isBlank } from "../../util/blank";
 type UpdateType = "EMAIL" | "USERNAME" | "PASSWORD";
 
 const MyPage = () => {
+  // router
+  const router = useRouter();
+
   const queryClient = useQueryClient();
 
-  const { userInfo } = useUser();
+  const { userInfo, clearUser } = useUser();
 
   // state
   const [email, setEmail] = useState<string>("");
@@ -24,7 +29,7 @@ const MyPage = () => {
 
   // mutation
   // updateUser
-  const { mutate: updateUser, isLoading } = useMutation(
+  const { mutate: updateUser, isLoading: isUpdateLoading } = useMutation(
     (updateType: UpdateType) => {
       switch (updateType) {
         case "EMAIL":
@@ -39,10 +44,34 @@ const MyPage = () => {
       onSuccess: () => {
         queryClient.invalidateQueries("user");
       },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          // TODO :: 추후 에러 핸들링
+          console.log(error);
+        }
+      },
     }
   );
 
-  if (isLoading) {
+  // deleteUser
+  const { mutate: deleteUser, isLoading: isDeleteLoading } = useMutation(
+    () => userApi.deleteUser(),
+    {
+      onSuccess: () => {
+        clearUser();
+        alert("회원탈퇴 완료됐습니다.");
+        router.replace("/");
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          // TODO :: 추후 에러 핸들링
+          console.log(error);
+        }
+      },
+    }
+  );
+
+  if (isUpdateLoading || isDeleteLoading) {
     <p>Loading...</p>;
   }
 
@@ -81,7 +110,7 @@ const MyPage = () => {
         변경
       </button>
 
-      <button>회원 탈퇴</button>
+      <button onClick={() => deleteUser()}>회원 탈퇴</button>
     </>
   );
 };
