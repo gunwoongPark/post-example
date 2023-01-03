@@ -3,3 +3,8 @@ export interface SignUpReq {
   password: string;
   username: string;
 }
+
+export interface SignInReq {
+  email: string;
+  password: string;
+}

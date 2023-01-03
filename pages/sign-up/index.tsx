@@ -15,6 +15,7 @@ const SignUpPage = () => {
   const [username, setUsername] = useState<string>("");
 
   // mutation
+  // signUp
   const { mutate: signUp, isLoading } = useMutation(
     () => userApi.signUp({ email, password, username }),
     {

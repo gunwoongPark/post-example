@@ -1,19 +1,31 @@
 import apiBase from "..";
-import { SignUpReq } from "./schema";
+import { SignInReq, SignUpReq } from "./schema";
 
-/**
- * 회원가입
- * @param  {} {email
- * @param  {} password
- * @param  {SignUpReq} username}
- * @returns Promise
- */
 const userApi = {
+  /**
+   * 회원가입
+   * @param  {} {email
+   * @param  {} password
+   * @param  {SignUpReq} username}
+   * @returns Promise
+   */
   signUp: ({ email, password, username }: SignUpReq): Promise<any> =>
     apiBase.post("/users/signup", {
       email,
       password,
       username,
+    }),
+
+  /**
+   * 로그인
+   * @param  {} {email
+   * @param  {SignInReq} password}
+   * @returns Promise
+   */
+  signIn: ({ email, password }: SignInReq): Promise<any> =>
+    apiBase.post("/users/signin", {
+      email,
+      password,
     }),
 };
 
