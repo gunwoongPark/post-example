@@ -29,10 +29,15 @@ const AppSelector = (props: PropsWithChildren<Record<never, any>>) => {
   const { userInfo, isLoading } = useUser();
 
   if (isLoading) {
-    return <>{props.children}</>;
+    return <></>;
   }
 
-  if (!isLoading && isNil(userInfo) && router.pathname === "/my-page") {
+  // TODO :: path 관련 함수화로 리팩토링 예정
+  if (
+    !isLoading &&
+    isNil(userInfo) &&
+    ["/my-page", "/post/write"].some((pathname) => pathname === router.pathname)
+  ) {
     router.replace("/sign-in");
     return <></>;
   }

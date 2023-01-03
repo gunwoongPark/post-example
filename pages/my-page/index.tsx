@@ -1,17 +1,9 @@
 import axios from "axios";
-import { isNil } from "lodash";
-import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import {
-  dehydrate,
-  QueryClient,
-  useMutation,
-  useQueryClient,
-} from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import useUser from "../../hooks/react-query/useUser";
 import userApi from "../../lib/api/user";
-import { queryKeys } from "../../react-query/queryKeys";
 import { isBlank } from "../../util/blank";
 
 type UpdateType = "EMAIL" | "USERNAME" | "PASSWORD";
