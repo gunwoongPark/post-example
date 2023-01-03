@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import useUser from "../../hooks/react-query/useUser";
 import userApi from "../../lib/api/user";
 import { isBlank } from "../../util/blank";
@@ -7,6 +7,8 @@ import { isBlank } from "../../util/blank";
 type UpdateType = "EMAIL" | "USERNAME" | "PASSWORD";
 
 const MyPage = () => {
+  const queryClient = useQueryClient();
+
   const { userInfo } = useUser();
 
   // state
@@ -22,7 +24,7 @@ const MyPage = () => {
 
   // mutation
   // updateUser
-  const { mutate: updateUser } = useMutation(
+  const { mutate: updateUser, isLoading } = useMutation(
     (updateType: UpdateType) => {
       switch (updateType) {
         case "EMAIL":
@@ -34,11 +36,15 @@ const MyPage = () => {
       }
     },
     {
-      onSuccess: (response) => {
-        console.log(response);
+      onSuccess: () => {
+        queryClient.invalidateQueries("user");
       },
     }
   );
+
+  if (isLoading) {
+    <p>Loading...</p>;
+  }
 
   return (
     <>
