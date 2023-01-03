@@ -1,8 +1,10 @@
 import { isNil } from "lodash";
+import { GetServerSideProps } from "next";
 import Link from "next/link";
 import useUser from "../hooks/react-query/useUser";
 
 const HomePage = () => {
+  // userInfo
   const { userInfo, clearUser } = useUser();
 
   return (

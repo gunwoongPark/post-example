@@ -6,13 +6,14 @@ import { queryKeys } from "../../react-query/queryKeys";
 const useUser = () => {
   const queryClient = useQueryClient();
 
-  const { data: userInfo } = useQuery(
+  const { data: userInfo, isLoading } = useQuery(
     queryKeys.user,
     async () => {
       const response = await userApi.userInfo();
       return response.data;
     },
     {
+      // 비회원이 error 잡힘
       retry: 0,
       onError: () => {
         clearUser();
@@ -26,7 +27,7 @@ const useUser = () => {
     localStorage.removeItem("refreshToken");
   }, [queryClient]);
 
-  return { userInfo, clearUser };
+  return { userInfo, clearUser, isLoading };
 };
 
 export default useUser;

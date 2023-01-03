@@ -2,7 +2,6 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { FormEvent, useCallback, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import useUser from "../../hooks/react-query/useUser";
 import userApi from "../../lib/api/user";
 
 import { isBlank, isNotBlank } from "../../util/blank";

@@ -1,9 +1,17 @@
 import axios from "axios";
+import { isNil } from "lodash";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import {
+  dehydrate,
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "react-query";
 import useUser from "../../hooks/react-query/useUser";
 import userApi from "../../lib/api/user";
+import { queryKeys } from "../../react-query/queryKeys";
 import { isBlank } from "../../util/blank";
 
 type UpdateType = "EMAIL" | "USERNAME" | "PASSWORD";
@@ -12,8 +20,10 @@ const MyPage = () => {
   // router
   const router = useRouter();
 
+  // queryClient
   const queryClient = useQueryClient();
 
+  // userInfo
   const { userInfo, clearUser } = useUser();
 
   // state
@@ -43,6 +53,7 @@ const MyPage = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries("user");
+        alert("업데이트 완료");
       },
       onError: (error) => {
         if (axios.isAxiosError(error)) {
@@ -84,7 +95,9 @@ const MyPage = () => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <button onClick={() => updateUser("EMAIL")}>변경</button>
+      <button onClick={() => updateUser("EMAIL")} disabled={isBlank(email)}>
+        변경
+      </button>
 
       <label htmlFor="username">이름</label>
       <input
@@ -93,7 +106,12 @@ const MyPage = () => {
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
-      <button onClick={() => updateUser("USERNAME")}>변경</button>
+      <button
+        onClick={() => updateUser("USERNAME")}
+        disabled={isBlank(username)}
+      >
+        변경
+      </button>
 
       <label htmlFor="password">비밀번호</label>
       <input
