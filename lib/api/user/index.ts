@@ -1,5 +1,5 @@
 import apiBase from "..";
-import { SignInReq, SignUpReq } from "./schema";
+import { SignInReq, SignUpReq, UpdateUserReq } from "./schema";
 
 const userApi = {
   /**
@@ -33,6 +33,16 @@ const userApi = {
    * @returns Promise
    */
   userInfo: (): Promise<any> => apiBase.get("/users/userInfo"),
+
+  /**
+   * 유저 정보 수정
+   * @param  {} {email
+   * @param  {} password
+   * @param  {UpdateUserReq} username}
+   * @returns Promise
+   */
+  updateUser: ({ email, password, username }: UpdateUserReq): Promise<any> =>
+    apiBase.patch("/users", { email, password, username }),
 };
 
 export default userApi;

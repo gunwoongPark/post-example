@@ -40,6 +40,11 @@ const apiBase = {
     const res = await axiosInstance.post(url, data, config);
     return res.data;
   },
+
+  patch: async (url: string, data: any, config?: AxiosRequestConfig<any>) => {
+    const res = await axiosInstance.patch(url, data, config);
+    return res.data;
+  },
 };
 
 export default apiBase;
