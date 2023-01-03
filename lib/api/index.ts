@@ -9,11 +9,8 @@ axiosInstance.interceptors.request.use(
   async (request) => {
     request.headers = request.headers ?? {};
 
-    if (
-      sessionStorage.getItem("accessToken") &&
-      "Authorization" in request.headers
-    ) {
-      request.headers.Authorization = `Bearer ${sessionStorage.getItem(
+    if (localStorage.getItem("accessToken")) {
+      request.headers.Authorization = `bearer ${localStorage.getItem(
         "accessToken"
       )}`;
     }

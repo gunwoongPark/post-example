@@ -19,10 +19,10 @@ const SignUpPage = () => {
   const { mutate: signUp, isLoading } = useMutation(
     () => userApi.signUp({ email, password, username }),
     {
-      onSuccess: (data) => {
-        if (isNotBlank(data.token) && isNotBlank(data.result)) {
+      onSuccess: (response) => {
+        if (isNotBlank(response.token) && isNotBlank(response.result)) {
           alert("회원가입 성공");
-          router.replace("/sign-in");
+          router.push("/sign-in");
         }
       },
       onError: (error) => {
@@ -35,7 +35,7 @@ const SignUpPage = () => {
   );
 
   // function
-  const onSaveSignUp = useCallback(
+  const onSubmitSingUpForm = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
@@ -54,35 +54,33 @@ const SignUpPage = () => {
   }
 
   return (
-    <>
-      <form onSubmit={onSaveSignUp}>
-        <label htmlFor="email">이메일</label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+    <form onSubmit={onSubmitSingUpForm}>
+      <label htmlFor="email">이메일</label>
+      <input
+        id="email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
-        <label htmlFor="password">비밀번호</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      <label htmlFor="password">비밀번호</label>
+      <input
+        id="password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-        <label htmlFor="username">이름</label>
-        <input
-          id="username"
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+      <label htmlFor="username">이름</label>
+      <input
+        id="username"
+        type="text"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
 
-        <button type="submit">회원가입</button>
-      </form>
-    </>
+      <button type="submit">회원가입</button>
+    </form>
   );
 };
 

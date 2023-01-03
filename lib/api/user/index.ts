@@ -27,6 +27,12 @@ const userApi = {
       email,
       password,
     }),
+
+  /**
+   * 유저 정보 조회
+   * @returns Promise
+   */
+  userInfo: (): Promise<any> => apiBase.get("/users/userInfo"),
 };
 
 export default userApi;
