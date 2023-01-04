@@ -3,6 +3,7 @@ import {
   DeletePostReq,
   FetchDetailPostReq,
   FetchPostReq,
+  ModifyPostReq,
   SavePostReq,
 } from "./schema";
 
@@ -40,6 +41,13 @@ const postApi = {
    */
   fetchDetailPost: ({ boardId }: FetchDetailPostReq): Promise<any> =>
     apiBase.get(`/boards/${boardId}`),
+
+  /**
+   * @param  {ModifyPostReq} {boardId}
+   * @returns Promise
+   */
+  modifyPost: ({ boardId }: ModifyPostReq): Promise<any> =>
+    apiBase.patch(`/boards/${boardId}`, {}),
 };
 
 export default postApi;
