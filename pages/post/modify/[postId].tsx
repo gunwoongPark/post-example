@@ -1,15 +1,18 @@
+import axios from "axios";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { useRouter } from "next/router";
 import { FormEvent, useCallback, useEffect, useState } from "react";
-import { dehydrate, QueryClient } from "react-query";
+import { dehydrate, QueryClient, useMutation } from "react-query";
 import styled from "styled-components";
 import useDetailPost from "../../../hooks/react-query/useDetailPost";
-import useUser from "../../../hooks/react-query/useUser";
 import postApi from "../../../lib/api/post";
 import { queryKeys } from "../../../react-query/queryKeys";
 import { isBlank } from "../../../util/blank";
 
 const PostModifyPage = () => {
-  const { userInfo } = useUser();
+  // router
+  const router = useRouter();
+
   const { post, isLoading } = useDetailPost();
 
   // state
@@ -23,6 +26,23 @@ const PostModifyPage = () => {
   }, [post]);
 
   // mutation
+  const { mutate: modifyPost } = useMutation(
+    () =>
+      postApi.modifyPost({ boardId: post.data.post.id, name: title, content }),
+    {
+      onSuccess: (response) => {
+        console.log(response);
+        alert("게시글이 수정됐습니다.");
+        router.replace(`/post/${post.data.post.id}`);
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          alert("세션이 만료됐습니다. 다시 로그인 해주세요.");
+          router.replace("/sign-in");
+        }
+      },
+    }
+  );
 
   // function
   const onSubmitPostModify = useCallback(
@@ -32,8 +52,10 @@ const PostModifyPage = () => {
       if (isBlank(title) || isBlank(content)) {
         alert("제목과 내용은 꼭 입력해주세요.");
       }
+
+      modifyPost();
     },
-    [title, content]
+    [title, content, modifyPost]
   );
 
   if (isLoading) {

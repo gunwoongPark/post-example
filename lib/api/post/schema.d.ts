@@ -18,4 +18,6 @@ export interface FetchDetailPostReq {
 
 export interface ModifyPostReq {
   boardId: string;
+  name: string;
+  content: string;
 }

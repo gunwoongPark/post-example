@@ -43,11 +43,12 @@ const postApi = {
     apiBase.get(`/boards/${boardId}`),
 
   /**
+   * 게시글 수정
    * @param  {ModifyPostReq} {boardId}
    * @returns Promise
    */
-  modifyPost: ({ boardId }: ModifyPostReq): Promise<any> =>
-    apiBase.patch(`/boards/${boardId}`, {}),
+  modifyPost: ({ boardId, name, content }: ModifyPostReq): Promise<any> =>
+    apiBase.patch(`/boards/${boardId}`, { name, content }),
 };
 
 export default postApi;

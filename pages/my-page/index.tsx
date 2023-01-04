@@ -50,8 +50,8 @@ const MyPage = () => {
       },
       onError: (error) => {
         if (axios.isAxiosError(error)) {
-          // TODO :: 추후 에러 핸들링
-          console.log(error);
+          alert("세션이 만료됐습니다. 다시 로그인 해주세요.");
+          router.replace("/sign-in");
         }
       },
     }
@@ -68,8 +68,8 @@ const MyPage = () => {
       },
       onError: (error) => {
         if (axios.isAxiosError(error)) {
-          // TODO :: 추후 에러 핸들링
-          console.log(error);
+          alert("세션이 만료됐습니다. 다시 로그인 해주세요.");
+          router.replace("/sign-in");
         }
       },
     }
