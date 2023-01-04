@@ -39,7 +39,9 @@ const AppSelector = (props: PropsWithChildren<Record<never, any>>) => {
   if (
     !isLoading &&
     isNil(userInfo) &&
-    ["/my-page", "/post/write"].some((pathname) => pathname === router.pathname)
+    ["/my-page", "/post/write", "/post/modify/[postId]"].some(
+      (pathname) => pathname === router.pathname
+    )
   ) {
     router.replace("/sign-in");
     return <></>;

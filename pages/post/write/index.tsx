@@ -89,7 +89,7 @@ const S = {
       margin: 0 auto;
 
       div {
-        margin-bottom: 16px;
+        margin: 16px 0 16px;
         display: flex;
         flex-direction: column;
       }

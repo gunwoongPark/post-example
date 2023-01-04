@@ -35,25 +35,6 @@ const HomePage = () => {
   };
   useIntersectionObserver({ callback: handleObserver, ref: targetRef });
 
-  // mutation
-  // deletePost
-  // const { mutate: deletePost, isLoading: isDeleteLoading } = useMutation(
-  //   (postId: string) => postApi.deletePost({ boardId: postId }),
-  //   {
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries(queryKeys.post);
-
-  //       alert("게시글을 삭제했습니다.");
-  //     },
-  //     onError: (error) => {
-  //       if (axios.isAxiosError(error)) {
-  //         // TODO :: 추후 에러 핸들링
-  //         console.log(error);
-  //       }
-  //     },
-  //   }
-  // );
-
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -75,17 +56,6 @@ const HomePage = () => {
                     생성일 : {dateFormat(post.created_at)}
                   </span>
                 </div>
-
-                {/* <div className="row-2">
-                  {isNotNil(userInfo) && userInfo.id === post.usersId && (
-                    <>
-                      <Link href={`/post/modify/${post.id}`}>
-                        <button>수정</button>
-                      </Link>
-                      <button onClick={() => deletePost(post.id)}>삭제</button>
-                    </>
-                  )}
-                </div> */}
               </li>
             ));
           }
