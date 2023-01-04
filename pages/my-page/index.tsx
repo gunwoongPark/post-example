@@ -2,6 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import styled from "styled-components";
 import useUser from "../../hooks/react-query/useUser";
 import userApi from "../../lib/api/user";
 import { queryKeys } from "../../react-query/queryKeys";
@@ -102,50 +103,84 @@ const MyPage = () => {
   }
 
   return (
-    <>
-      <label htmlFor="email">아이디(이메일)</label>
-      <input
-        id="email"
-        type="text"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <button onClick={() => updateHandler("EMAIL")} disabled={isBlank(email)}>
-        변경
-      </button>
+    <S.Container>
+      <div className="row">
+        <label htmlFor="email">아이디(이메일)</label>
+        <div className="input-container">
+          <input
+            id="email"
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button
+            onClick={() => updateHandler("EMAIL")}
+            disabled={isBlank(email)}
+          >
+            변경
+          </button>
+        </div>
+      </div>
 
-      <label htmlFor="username">이름</label>
-      <input
-        id="username"
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <button
-        onClick={() => updateHandler("USERNAME")}
-        disabled={isBlank(username)}
-      >
-        변경
-      </button>
+      <div className="row">
+        <label htmlFor="username">이름</label>
+        <div className="input-container">
+          <input
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <button
+            onClick={() => updateHandler("USERNAME")}
+            disabled={isBlank(username)}
+          >
+            변경
+          </button>
+        </div>
+      </div>
 
-      <label htmlFor="password">비밀번호</label>
-      <input
-        id="password"
-        type="password"
-        value={password}
-        placeholder="변경할 비밀번호를 입력해주세요."
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button
-        onClick={() => updateHandler("PASSWORD")}
-        disabled={isBlank(password)}
-      >
-        변경
-      </button>
+      <div className="row">
+        <label htmlFor="password">비밀번호</label>
+        <div className="input-container">
+          <input
+            id="password"
+            type="password"
+            value={password}
+            placeholder="변경할 비밀번호를 입력해주세요."
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            onClick={() => updateHandler("PASSWORD")}
+            disabled={isBlank(password)}
+          >
+            변경
+          </button>
+        </div>
+      </div>
 
-      <button onClick={() => deleteUser()}>회원 탈퇴</button>
-    </>
+      <div className="withdrawal-container">
+        <button onClick={() => deleteUser()}>회원 탈퇴</button>
+      </div>
+    </S.Container>
   );
 };
 
 export default MyPage;
+
+const S = {
+  Container: styled.div`
+    width: 600px;
+    margin: 0 auto;
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin: 16px 0;
+    }
+
+    .withdrawal-container {
+      text-align: right;
+    }
+  `,
+};

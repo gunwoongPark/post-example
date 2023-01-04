@@ -2,7 +2,8 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormEvent, useCallback, useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
+import styled from "styled-components";
 import userApi from "../../lib/api/user";
 
 import { isBlank, isNotBlank } from "../../util/blank";
@@ -68,30 +69,62 @@ const SignInPage = () => {
   }
 
   return (
-    <>
+    <S.Container>
       <form onSubmit={onSubmitSignInForm}>
-        <label htmlFor="email">아이디(이메일)</label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <div>
+          <label htmlFor="email">아이디(이메일)</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
-        <label htmlFor="password">비밀번호</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div>
+          <label htmlFor="password">비밀번호</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
 
         <button type="submit">로그인</button>
       </form>
 
-      <Link href="sign-up">회원가입</Link>
-    </>
+      <div className="sign-up-container">
+        <Link href="sign-up">회원가입</Link>
+      </div>
+    </S.Container>
   );
 };
 
 export default SignInPage;
+
+const S = {
+  Container: styled.div`
+    width: 600px;
+    margin: 0 auto;
+
+    form {
+      display: flex;
+      flex-direction: column;
+
+      div {
+        margin: 16px 0 16px;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    .sign-up-container {
+      text-align: right;
+      a {
+        display: inline-block;
+        margin-top: 8px;
+      }
+    }
+  `,
+};

@@ -1,7 +1,7 @@
 import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { dehydrate, QueryClient } from "react-query";
 import styled from "styled-components";
 import useIntersectionObserver from "../hooks/custom/useIntersectionObserver";
@@ -23,10 +23,6 @@ const HomePage = () => {
   const { postList, isLoading, isFetching, hasNextPage, fetchNextPage } =
     usePost();
 
-  useEffect(() => {
-    console.log(postList);
-  }, [postList]);
-
   // InfScroll
   const handleObserver = (entries: IntersectionObserverEntry[]) => {
     if (!hasNextPage) {
@@ -45,7 +41,11 @@ const HomePage = () => {
 
   return (
     <S.Container>
-      {userInfo && <Link href="/post/write">글쓰기</Link>}
+      {userInfo && (
+        <div>
+          <Link href="/post/write">글쓰기</Link>
+        </div>
+      )}
       <ul>
         {postList?.pages?.map((pageData: any) => {
           if (isNotBlank(pageData.data)) {
@@ -91,9 +91,12 @@ export default HomePage;
 
 const S = {
   Container: styled.div`
-    a {
-      display: inline-block;
-      margin: 16px 0 16px 16px;
+    div {
+      text-align: right;
+      a {
+        display: inline-block;
+        margin: 16px 16px 16px 0;
+      }
     }
 
     li {

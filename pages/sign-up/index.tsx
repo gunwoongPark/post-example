@@ -2,6 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { FormEvent, useCallback, useState } from "react";
 import { useMutation } from "react-query";
+import styled from "styled-components";
 import userApi from "../../lib/api/user";
 import { isBlank, isNotBlank } from "../../util/blank";
 
@@ -54,34 +55,62 @@ const SignUpPage = () => {
   }
 
   return (
-    <form onSubmit={onSubmitSingUpForm}>
-      <label htmlFor="email">이메일</label>
-      <input
-        id="email"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+    <S.Container>
+      <form onSubmit={onSubmitSingUpForm}>
+        <div>
+          <label htmlFor="email">이메일</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
-      <label htmlFor="password">비밀번호</label>
-      <input
-        id="password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <div>
+          <label htmlFor="password">비밀번호</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
 
-      <label htmlFor="username">이름</label>
-      <input
-        id="username"
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
+        <div>
+          <label htmlFor="username">이름</label>
+          <input
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
 
-      <button type="submit">회원가입</button>
-    </form>
+        <button className="sign-up-container" type="submit">
+          회원가입
+        </button>
+      </form>
+    </S.Container>
   );
 };
 
 export default SignUpPage;
+
+const S = {
+  Container: styled.div`
+    width: 600px;
+    margin: 0 auto;
+
+    form {
+      display: flex;
+      flex-direction: column;
+
+      div {
+        margin: 16px 0 16px;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  `,
+};
