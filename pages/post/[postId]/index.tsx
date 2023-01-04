@@ -2,6 +2,7 @@ import axios from "axios";
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { FormEvent, useCallback, useState } from "react";
 import { dehydrate, QueryClient, useMutation } from "react-query";
 import styled from "styled-components";
 import useDetailPost from "../../../hooks/react-query/useDetailPost";
@@ -17,6 +18,9 @@ const PostDetailPage = () => {
 
   const { userInfo } = useUser();
   const { post, isLoading } = useDetailPost();
+
+  // state
+  const [comment, setComment] = useState<string>("");
 
   // mutation
   // deletePost
@@ -35,6 +39,13 @@ const PostDetailPage = () => {
       },
     }
   );
+
+  // saveComment
+
+  // function
+  const onSubmitComment = useCallback((e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  }, []);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -66,10 +77,14 @@ const PostDetailPage = () => {
       <hr />
       <span className="comment-count">댓글수 ({post.data.comment.length})</span>
 
-      <div className="write-comment-container">
-        <textarea rows={3} />
-        <button>등록</button>
-      </div>
+      <form className="write-comment-container" onSubmit={onSubmitComment}>
+        <textarea
+          rows={3}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
+        <button type="submit">등록</button>
+      </form>
     </S.Container>
   );
 };
