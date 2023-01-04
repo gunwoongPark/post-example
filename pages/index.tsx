@@ -1,13 +1,8 @@
-import axios from "axios";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useRef } from "react";
-import {
-  dehydrate,
-  QueryClient,
-  useMutation,
-  useQueryClient,
-} from "react-query";
+import { dehydrate, QueryClient } from "react-query";
 import styled from "styled-components";
 import useIntersectionObserver from "../hooks/custom/useIntersectionObserver";
 import usePost from "../hooks/react-query/usePost";
@@ -16,21 +11,17 @@ import postApi from "../lib/api/post";
 import { queryKeys } from "../react-query/queryKeys";
 import { isNotBlank } from "../util/blank";
 import dateFormat from "../util/date";
-import { isNotNil } from "../util/nil";
 
 const HomePage = () => {
-  const queryClient = useQueryClient();
+  // router
+  const router = useRouter();
 
   // ref
   const targetRef = useRef<HTMLDivElement>(null);
 
   const { userInfo } = useUser();
-  const {
-    postList,
-    isLoading: isPostLoading,
-    hasNextPage,
-    fetchNextPage,
-  } = usePost();
+  const { postList, isLoading, isFetching, hasNextPage, fetchNextPage } =
+    usePost();
 
   // InfScroll
   const handleObserver = (entries: IntersectionObserverEntry[]) => {
@@ -46,38 +37,38 @@ const HomePage = () => {
 
   // mutation
   // deletePost
-  const { mutate: deletePost, isLoading: isDeleteLoading } = useMutation(
-    (postId: string) => postApi.deletePost({ boardId: postId }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(queryKeys.post);
-        alert("게시글을 삭제했습니다.");
-      },
-      onError: (error) => {
-        if (axios.isAxiosError(error)) {
-          // TODO :: 추후 에러 핸들링
-          console.log(error);
-        }
-      },
-    }
-  );
+  // const { mutate: deletePost, isLoading: isDeleteLoading } = useMutation(
+  //   (postId: string) => postApi.deletePost({ boardId: postId }),
+  //   {
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries(queryKeys.post);
 
-  if (isPostLoading || isDeleteLoading) {
+  //       alert("게시글을 삭제했습니다.");
+  //     },
+  //     onError: (error) => {
+  //       if (axios.isAxiosError(error)) {
+  //         // TODO :: 추후 에러 핸들링
+  //         console.log(error);
+  //       }
+  //     },
+  //   }
+  // );
+
+  if (isLoading) {
     return <p>Loading...</p>;
   }
 
   return (
     <S.Container>
-      {userInfo && (
-        <Link href="/post/write">
-          <button>글쓰기</button>
-        </Link>
-      )}
+      {userInfo && <Link href="/post/write">글쓰기</Link>}
       <ul>
         {postList?.pages?.map((pageData: any) => {
           if (isNotBlank(pageData.data)) {
             return pageData.data.map((post: any, index: number) => (
-              <li key={`post-${post.id}-${index}`}>
+              <li
+                key={`post-${post.id}-${index}`}
+                onClick={() => router.push(`/post/${post.id}`)}
+              >
                 <div className="row-1">
                   <span className="post-title">{post.name}</span>
                   <span className="post-create-time">
@@ -85,7 +76,7 @@ const HomePage = () => {
                   </span>
                 </div>
 
-                <div className="row-2">
+                {/* <div className="row-2">
                   {isNotNil(userInfo) && userInfo.id === post.usersId && (
                     <>
                       <Link href={`/post/modify/${post.id}`}>
@@ -94,7 +85,7 @@ const HomePage = () => {
                       <button onClick={() => deletePost(post.id)}>삭제</button>
                     </>
                   )}
-                </div>
+                </div> */}
               </li>
             ));
           }
@@ -102,6 +93,8 @@ const HomePage = () => {
       </ul>
 
       <div ref={targetRef} />
+
+      {isFetching && <p className="fetch-loading-text">Loading...</p>}
     </S.Container>
   );
 };
@@ -124,7 +117,11 @@ export default HomePage;
 
 const S = {
   Container: styled.div`
-    text-align: right;
+    a {
+      display: inline-block;
+      margin: 16px 0 16px 16px;
+    }
+
     li {
       height: 200px;
       cursor: pointer;
@@ -138,10 +135,6 @@ const S = {
         display: flex;
         justify-content: space-between;
         margin: 16px 16px 0;
-      }
-
-      .row-2 {
-        margin: 0 16px 16px 0;
       }
 
       span {
