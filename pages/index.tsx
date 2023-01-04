@@ -1,4 +1,4 @@
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
+import { GetStaticProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRef } from "react";
@@ -99,26 +99,29 @@ const S = {
       }
     }
 
-    li {
-      height: 200px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-
-      border: 1px solid black;
-
-      .row-1 {
+    ul {
+      margin-top: 8px;
+      li {
+        height: 200px;
+        cursor: pointer;
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
-        margin: 16px 16px 0;
-      }
 
-      span {
-        display: inline-block;
+        border: 1px solid black;
 
-        &.post-title {
-          font-size: 24px;
+        .row-1 {
+          display: flex;
+          justify-content: space-between;
+          margin: 16px 16px 0;
+        }
+
+        span {
+          display: inline-block;
+
+          &.post-title {
+            font-size: 24px;
+          }
         }
       }
     }

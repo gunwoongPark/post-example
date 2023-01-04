@@ -65,6 +65,11 @@ const PostDetailPage = () => {
 
       <hr />
       <span className="comment-count">댓글수 ({post.data.comment.length})</span>
+
+      <div className="write-comment-container">
+        <textarea rows={3} />
+        <button>등록</button>
+      </div>
     </S.Container>
   );
 };
@@ -128,11 +133,21 @@ const S = {
     .content {
       display: inline-block;
       margin: 8px 0 24px;
+      white-space: break-spaces;
     }
 
     .comment-count {
       display: inline-block;
       margin-top: 8px;
+    }
+
+    .write-comment-container {
+      display: flex;
+      align-items: unset;
+      margin-top: 8px;
+      textarea {
+        width: 100%;
+      }
     }
   `,
 };
