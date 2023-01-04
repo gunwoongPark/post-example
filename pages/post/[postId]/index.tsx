@@ -3,12 +3,19 @@ import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormEvent, useCallback, useState } from "react";
-import { dehydrate, QueryClient, useMutation } from "react-query";
+import {
+  dehydrate,
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "react-query";
 import styled from "styled-components";
 import useDetailPost from "../../../hooks/react-query/useDetailPost";
 import useUser from "../../../hooks/react-query/useUser";
+import commentApi from "../../../lib/api/comment";
 import postApi from "../../../lib/api/post";
 import { queryKeys } from "../../../react-query/queryKeys";
+import { isBlank } from "../../../util/blank";
 import dateFormat from "../../../util/date";
 import { isNotNil } from "../../../util/nil";
 
@@ -16,8 +23,10 @@ const PostDetailPage = () => {
   // router
   const router = useRouter();
 
+  const queryClient = useQueryClient();
+
   const { userInfo } = useUser();
-  const { post, isLoading } = useDetailPost();
+  const { post, isLoading: isPostLoading } = useDetailPost();
 
   // state
   const [comment, setComment] = useState<string>("");
@@ -41,13 +50,40 @@ const PostDetailPage = () => {
   );
 
   // saveComment
+  const { mutate: saveComment, isLoading: isCommentLoading } = useMutation(
+    () => commentApi.saveComment({ boardId: post.data.post.id, comment }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([queryKeys.post, post.data.post.id]);
+        setComment("");
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          // TODO :: 추후 에러 핸들링
+          console.log(error);
+        }
+      },
+    }
+  );
 
   // function
-  const onSubmitComment = useCallback((e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  }, []);
+  const onSubmitComment = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
 
-  if (isLoading) {
+      if (isBlank(comment)) {
+        alert("댓글을 작성해주세요.");
+        return;
+      }
+
+      if (confirm("댓글을 작성하시겠습니까?")) {
+        saveComment();
+      }
+    },
+    [comment, saveComment]
+  );
+
+  if (isPostLoading) {
     return <p>Loading...</p>;
   }
 
