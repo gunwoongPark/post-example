@@ -75,6 +75,7 @@ const S = {
         display: inline-block;
         font-size: 36px;
         font-weight: 700;
+        margin-left: 8px;
       }
 
       nav {
