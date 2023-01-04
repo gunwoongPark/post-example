@@ -34,6 +34,7 @@ const postApi = {
     apiBase.delete(`/boards/${boardId}`),
 
   /**
+   * 게시글 상세 조회
    * @param  {FetchDetailPostReq} {boardId}
    * @returns Promise
    */

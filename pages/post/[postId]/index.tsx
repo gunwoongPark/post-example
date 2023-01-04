@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
 import { useRouter } from "next/router";
-import { QueryClient } from "react-query";
+import { dehydrate, QueryClient } from "react-query";
 import postApi from "../../../lib/api/post";
 import { queryKeys } from "../../../react-query/queryKeys";
 
@@ -21,10 +21,15 @@ export const getStaticProps: GetStaticProps = async (
 
   const queryClient = new QueryClient();
 
-  // await queryClient.prefetchQuery([queryKeys.post, postId], () => postApi.);
+  await queryClient.prefetchQuery([queryKeys.post, postId], () =>
+    postApi.fetchDetailPost({ boardId: postId })
+  );
 
   return {
-    props: {},
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+    revalidate: 30,
   };
 };
 
