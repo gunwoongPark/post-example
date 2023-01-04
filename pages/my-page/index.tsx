@@ -77,7 +77,7 @@ const MyPage = () => {
   );
 
   // function
-  const modifyHandler = useCallback(
+  const onClickModifyButton = useCallback(
     (modifyType: ModifyType) => {
       if (confirm("회원정보를 수정하시겠습니까?")) {
         modifyUser(modifyType);
@@ -114,7 +114,7 @@ const MyPage = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
           <button
-            onClick={() => modifyHandler("EMAIL")}
+            onClick={() => onClickModifyButton("EMAIL")}
             disabled={isBlank(email)}
           >
             변경
@@ -132,7 +132,7 @@ const MyPage = () => {
             onChange={(e) => setUsername(e.target.value)}
           />
           <button
-            onClick={() => modifyHandler("USERNAME")}
+            onClick={() => onClickModifyButton("USERNAME")}
             disabled={isBlank(username)}
           >
             변경
@@ -151,7 +151,7 @@ const MyPage = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button
-            onClick={() => modifyHandler("PASSWORD")}
+            onClick={() => onClickModifyButton("PASSWORD")}
             disabled={isBlank(password)}
           >
             변경

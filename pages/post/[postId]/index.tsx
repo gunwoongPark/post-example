@@ -66,6 +66,22 @@ const PostDetailPage = () => {
     }
   );
 
+  // deleteComment
+  const { mutate: deleteComment, isLoading: isDeleteLoading } = useMutation(
+    (commentId: string) => commentApi.deleteComment({ commentId }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([queryKeys.post], post.data.post.id);
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          // TODO :: 추후 에러 핸들링
+          console.log(error);
+        }
+      },
+    }
+  );
+
   // function
   const onSubmitComment = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
@@ -81,6 +97,15 @@ const PostDetailPage = () => {
       }
     },
     [comment, saveComment]
+  );
+
+  const onClickDeleteButton = useCallback(
+    (commentId: string) => {
+      if (confirm("댓글을 삭제하시겠습니까?")) {
+        deleteComment(commentId);
+      }
+    },
+    [deleteComment]
   );
 
   if (isPostLoading) {
@@ -111,7 +136,9 @@ const PostDetailPage = () => {
       <span className="content">{post.data.post.content}</span>
 
       <hr />
-      <span className="comment-count">댓글수 ({post.data.comment.length})</span>
+      <span className="comment-count">
+        댓글 수 ({post.data.comment.length})
+      </span>
 
       <form className="write-comment-container" onSubmit={onSubmitComment}>
         <textarea
@@ -133,10 +160,16 @@ const PostDetailPage = () => {
                 </span>
               </div>
 
-              <div className="button-container">
-                <button>수정</button>
-                <button>삭제</button>
-              </div>
+              {isNotNil(userInfo) && userInfo.id === post.data.post.usersId && (
+                <>
+                  <div className="button-container">
+                    <button>수정</button>
+                    <button onClick={() => onClickDeleteButton(comment.id)}>
+                      삭제
+                    </button>
+                  </div>
+                </>
+              )}
             </li>
           ))}
         </ul>
