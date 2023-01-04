@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import styled from "styled-components";
 import useDetailPost from "../hooks/react-query/useDetailPost";
@@ -15,9 +15,22 @@ const CommentView = (props: { comment: any }) => {
   const { userInfo } = useUser();
   const { post } = useDetailPost();
 
+  // state
+  const [isModifyMode, setIsModifyMode] = useState<boolean>(false);
+  const [comment, setComment] = useState<string>("");
+
+  // useEffect
+  useEffect(() => {
+    if (isModifyMode) {
+      setComment(props.comment.comment);
+    } else {
+      setComment("");
+    }
+  }, [isModifyMode, props.comment.comment]);
+
   // mutation
   // deleteComment
-  const { mutate: deleteComment, isLoading: isDeleteLoading } = useMutation(
+  const { mutate: deleteComment } = useMutation(
     (commentId: string) => commentApi.deleteComment({ commentId }),
     {
       onSuccess: () => {
@@ -45,21 +58,37 @@ const CommentView = (props: { comment: any }) => {
   return (
     <S.Container>
       <li>
-        <div className="content-container">
-          <span className="comment">{props.comment.comment}</span>
-          <span className="comment-created-date">
-            작성일 : {dateFormat(props.comment.created_at)}
-          </span>
-        </div>
-
-        {isNotNil(userInfo) && userInfo.id === post.data.post.usersId && (
+        {isModifyMode ? (
           <>
-            <div className="button-container">
-              <button>수정</button>
-              <button onClick={() => onClickDeleteButton(props.comment.id)}>
-                삭제
-              </button>
+            <textarea
+              rows={3}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+            <div className="modify-button-container">
+              <button onClick={() => setIsModifyMode(false)}>취소</button>
+              <button>저장</button>
             </div>
+          </>
+        ) : (
+          <>
+            <div className="content-container">
+              <span className="comment">{props.comment.comment}</span>
+              <span className="comment-created-date">
+                작성일 : {dateFormat(props.comment.created_at)}
+              </span>
+            </div>
+
+            {isNotNil(userInfo) && userInfo.id === post.data.post.usersId && (
+              <>
+                <div className="button-container">
+                  <button onClick={() => setIsModifyMode(true)}>수정</button>
+                  <button onClick={() => onClickDeleteButton(props.comment.id)}>
+                    삭제
+                  </button>
+                </div>
+              </>
+            )}
           </>
         )}
       </li>
@@ -76,6 +105,10 @@ const S = {
       flex-direction: column;
       width: 100%;
       border: 1px solid black;
+
+      .modify-button-container {
+        text-align: right;
+      }
 
       .content-container {
         display: flex;
