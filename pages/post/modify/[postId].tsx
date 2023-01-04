@@ -53,7 +53,9 @@ const PostModifyPage = () => {
         alert("제목과 내용은 꼭 입력해주세요.");
       }
 
-      modifyPost();
+      if (confirm("게시글을 수정하시겠습니까?")) {
+        modifyPost();
+      }
     },
     [title, content, modifyPost]
   );

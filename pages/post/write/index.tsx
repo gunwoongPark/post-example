@@ -16,7 +16,7 @@ const PostWritePage = () => {
 
   // mutation
   // savePost
-  const { mutate: savePost, isLoading } = useMutation(
+  const { mutate: savePost } = useMutation(
     () => postApi.savePost({ name: title, content }),
     {
       onSuccess: () => {
@@ -41,14 +41,12 @@ const PostWritePage = () => {
         alert("제목과 내용은 꼭 입력해주세요.");
       }
 
-      savePost();
+      if (confirm("게시글을 작성하시겠습니까?")) {
+        savePost();
+      }
     },
     [title, content, savePost]
   );
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <S.Container>

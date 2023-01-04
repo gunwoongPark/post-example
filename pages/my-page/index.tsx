@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import useUser from "../../hooks/react-query/useUser";
 import userApi from "../../lib/api/user";
@@ -75,6 +75,28 @@ const MyPage = () => {
     }
   );
 
+  // function
+  const updateHandler = useCallback(
+    (updateType: UpdateType) => {
+      if (confirm("회원정보를 수정하시겠습니까?")) {
+        updateUser(updateType);
+      } else {
+        switch (updateType) {
+          case "EMAIL":
+            setEmail(userInfo.email);
+            break;
+          case "USERNAME":
+            setUsername(userInfo.username);
+            break;
+          case "PASSWORD":
+            setPassword("");
+            break;
+        }
+      }
+    },
+    [updateUser, userInfo]
+  );
+
   if (isUpdateLoading || isDeleteLoading) {
     <p>Loading...</p>;
   }
@@ -88,7 +110,7 @@ const MyPage = () => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <button onClick={() => updateUser("EMAIL")} disabled={isBlank(email)}>
+      <button onClick={() => updateHandler("EMAIL")} disabled={isBlank(email)}>
         변경
       </button>
 
@@ -100,7 +122,7 @@ const MyPage = () => {
         onChange={(e) => setUsername(e.target.value)}
       />
       <button
-        onClick={() => updateUser("USERNAME")}
+        onClick={() => updateHandler("USERNAME")}
         disabled={isBlank(username)}
       >
         변경
@@ -115,7 +137,7 @@ const MyPage = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button
-        onClick={() => updateUser("PASSWORD")}
+        onClick={() => updateHandler("PASSWORD")}
         disabled={isBlank(password)}
       >
         변경
