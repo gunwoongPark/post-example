@@ -7,6 +7,7 @@ import { PropsWithChildren } from "react";
 import useUser from "../hooks/react-query/useUser";
 import { isNil } from "lodash";
 import { useRouter } from "next/router";
+import LayoutView from "../components/LayoutView";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -15,7 +16,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <AppSelector>
-            <Component {...pageProps} />
+            <LayoutView>
+              <Component {...pageProps} />
+            </LayoutView>
           </AppSelector>
         </Hydrate>
         <ReactQueryDevtools />

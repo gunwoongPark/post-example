@@ -1,4 +1,5 @@
 import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormEvent, useCallback, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
@@ -67,25 +68,29 @@ const SignInPage = () => {
   }
 
   return (
-    <form onSubmit={onSubmitSignInForm}>
-      <label htmlFor="email">아이디(이메일)</label>
-      <input
-        id="email"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+    <>
+      <form onSubmit={onSubmitSignInForm}>
+        <label htmlFor="email">아이디(이메일)</label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      <label htmlFor="password">비밀번호</label>
-      <input
-        id="password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <label htmlFor="password">비밀번호</label>
+        <input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <button type="submit">로그인</button>
-    </form>
+        <button type="submit">로그인</button>
+      </form>
+
+      <Link href="sign-up">회원가입</Link>
+    </>
   );
 };
 
