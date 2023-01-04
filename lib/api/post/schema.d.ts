@@ -11,3 +11,7 @@ export interface SavePostReq {
 export interface DeletePostReq {
   boardId: string;
 }
+
+export interface FetchDetailPostReq {
+  boardId: string;
+}
