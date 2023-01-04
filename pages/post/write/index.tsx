@@ -1,25 +1,53 @@
 import { FormEvent, useCallback, useState } from "react";
 import { useMutation } from "react-query";
 import styled from "styled-components";
-import { queryKeys } from "../../../react-query/queryKeys";
 import { isBlank } from "../../../util/blank";
+import postApi from "../../../lib/api/post";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 const PostWritePage = () => {
+  // router
+  const router = useRouter();
+
   // state
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
 
+  // mutation
+  // savePost
+  const { mutate: savePost, isLoading } = useMutation(
+    () => postApi.savePost({ name: title, content }),
+    {
+      onSuccess: () => {
+        router.push("/");
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          // TODO :: 추후 에러 핸들링
+          console.log(error);
+        }
+      },
+    }
+  );
+
   // function
   const onSubmitPost = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
       if (isBlank(title) || isBlank(content)) {
         alert("제목과 내용은 꼭 입력해주세요.");
       }
 
-      e.preventDefault();
+      savePost();
     },
-    [title, content]
+    [title, content, savePost]
   );
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <S.Container>
