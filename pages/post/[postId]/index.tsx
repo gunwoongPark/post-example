@@ -10,6 +10,7 @@ import {
   useQueryClient,
 } from "react-query";
 import styled from "styled-components";
+import CommentView from "../../../components/CommentView";
 import useDetailPost from "../../../hooks/react-query/useDetailPost";
 import useUser from "../../../hooks/react-query/useUser";
 import commentApi from "../../../lib/api/comment";
@@ -26,7 +27,7 @@ const PostDetailPage = () => {
   const queryClient = useQueryClient();
 
   const { userInfo } = useUser();
-  const { post, isLoading: isPostLoading } = useDetailPost();
+  const { post, isLoading } = useDetailPost();
 
   // state
   const [comment, setComment] = useState<string>("");
@@ -50,28 +51,12 @@ const PostDetailPage = () => {
   );
 
   // saveComment
-  const { mutate: saveComment, isLoading: isCommentLoading } = useMutation(
+  const { mutate: saveComment } = useMutation(
     () => commentApi.saveComment({ boardId: post.data.post.id, comment }),
     {
       onSuccess: () => {
         queryClient.invalidateQueries([queryKeys.post, post.data.post.id]);
         setComment("");
-      },
-      onError: (error) => {
-        if (axios.isAxiosError(error)) {
-          // TODO :: 추후 에러 핸들링
-          console.log(error);
-        }
-      },
-    }
-  );
-
-  // deleteComment
-  const { mutate: deleteComment, isLoading: isDeleteLoading } = useMutation(
-    (commentId: string) => commentApi.deleteComment({ commentId }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries([queryKeys.post], post.data.post.id);
       },
       onError: (error) => {
         if (axios.isAxiosError(error)) {
@@ -99,16 +84,7 @@ const PostDetailPage = () => {
     [comment, saveComment]
   );
 
-  const onClickDeleteButton = useCallback(
-    (commentId: string) => {
-      if (confirm("댓글을 삭제하시겠습니까?")) {
-        deleteComment(commentId);
-      }
-    },
-    [deleteComment]
-  );
-
-  if (isPostLoading) {
+  if (isLoading) {
     return <p>Loading...</p>;
   }
 
@@ -152,25 +128,7 @@ const PostDetailPage = () => {
       <div className="comment-container">
         <ul>
           {post.data.comment.map((comment: any) => (
-            <li key={comment.id}>
-              <div className="content-container">
-                <span className="comment">{comment.comment}</span>
-                <span className="comment-created-date">
-                  작성일 : {dateFormat(comment.created_at)}
-                </span>
-              </div>
-
-              {isNotNil(userInfo) && userInfo.id === post.data.post.usersId && (
-                <>
-                  <div className="button-container">
-                    <button>수정</button>
-                    <button onClick={() => onClickDeleteButton(comment.id)}>
-                      삭제
-                    </button>
-                  </div>
-                </>
-              )}
-            </li>
+            <CommentView key={comment.id} comment={comment} />
           ))}
         </ul>
       </div>
@@ -256,35 +214,6 @@ const S = {
 
     .comment-container {
       margin-top: 16px;
-      ul {
-        li {
-          &:not(:first-child) {
-            margin-top: 8px;
-          }
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-          border: 1px solid black;
-
-          .content-container {
-            display: flex;
-            justify-content: space-between;
-            .comment {
-              white-space: break-spaces;
-              margin: 8px 0 8px 8px;
-            }
-
-            .comment-created-date {
-              margin: 8px 8px 8px 0;
-            }
-          }
-
-          .button-container {
-            display: flex;
-            justify-content: flex-end;
-          }
-        }
-      }
     }
   `,
 };
