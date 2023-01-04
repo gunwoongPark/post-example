@@ -9,7 +9,7 @@ const postApi = {
    * @returns Promise
    */
   fetchPost: ({ skip, take }: FetchPostReq): Promise<any> =>
-    apiBase.get("/boards"),
+    apiBase.get(`/boards?skip=${skip}&take=${take}`),
 
   /**
    * 게시글 작성
