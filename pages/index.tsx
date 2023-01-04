@@ -1,3 +1,4 @@
+import { isNil } from "lodash";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRef } from "react";
@@ -10,6 +11,7 @@ import postApi from "../lib/api/post";
 import { queryKeys } from "../react-query/queryKeys";
 import { isNotBlank } from "../util/blank";
 import dateFormat from "../util/date";
+import { isNotNil } from "../util/nil";
 
 const HomePage = () => {
   // ref
@@ -53,7 +55,7 @@ const HomePage = () => {
                 </div>
 
                 <div className="row-2">
-                  {userInfo.id === post.usersId && (
+                  {isNotNil(userInfo) && userInfo.id === post.usersId && (
                     <>
                       <Link href={`/post/modify/${post.id}`}>
                         <button>수정</button>
@@ -105,6 +107,10 @@ const S = {
         display: flex;
         justify-content: space-between;
         margin: 16px 16px 0;
+      }
+
+      .row-2 {
+        margin: 0 16px 16px 0;
       }
 
       span {

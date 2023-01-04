@@ -7,3 +7,7 @@ export interface SavePostReq {
   name: string;
   content: string;
 }
+
+export interface DeletePostReq {
+  boardId: string;
+}

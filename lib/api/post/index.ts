@@ -1,5 +1,5 @@
 import apiBase from "..";
-import { FetchPostReq, SavePostReq } from "./schema";
+import { DeletePostReq, FetchPostReq, SavePostReq } from "./schema";
 
 const postApi = {
   /**
@@ -19,6 +19,14 @@ const postApi = {
    */
   savePost: ({ name, content }: SavePostReq): Promise<any> =>
     apiBase.post("/boards", { name, content }),
+
+  /**
+   *
+   * @param  {DeletePostReq} {boardId}
+   * @returns Promise
+   */
+  deletePost: ({ boardId }: DeletePostReq): Promise<any> =>
+    apiBase.delete(`/boards/${boardId}`),
 };
 
 export default postApi;
