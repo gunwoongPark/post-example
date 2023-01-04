@@ -1,7 +1,7 @@
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { dehydrate, QueryClient } from "react-query";
 import styled from "styled-components";
 import useIntersectionObserver from "../hooks/custom/useIntersectionObserver";
@@ -22,6 +22,10 @@ const HomePage = () => {
   const { userInfo } = useUser();
   const { postList, isLoading, isFetching, hasNextPage, fetchNextPage } =
     usePost();
+
+  useEffect(() => {
+    console.log(postList);
+  }, [postList]);
 
   // InfScroll
   const handleObserver = (entries: IntersectionObserverEntry[]) => {
@@ -69,7 +73,7 @@ const HomePage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(queryKeys.post, () =>

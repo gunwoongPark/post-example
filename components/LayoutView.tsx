@@ -14,9 +14,13 @@ const LayoutView = (props: PropsWithChildren<Record<never, any>>) => {
   return (
     <S.Container>
       <header>
-        <h1>
-          <Link href="/">POST</Link>
-        </h1>
+        {router.pathname === "/" ? (
+          <h1 onClick={() => router.reload()}>POST</h1>
+        ) : (
+          <h1>
+            <Link href="/">POST</Link>
+          </h1>
+        )}
 
         <nav>
           <ul>
@@ -77,6 +81,7 @@ const S = {
         font-size: 36px;
         font-weight: 700;
         margin-left: 8px;
+        cursor: pointer;
       }
 
       nav {
