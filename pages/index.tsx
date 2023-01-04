@@ -53,8 +53,14 @@ const HomePage = () => {
                 </div>
 
                 <div className="row-2">
-                  <button>수정</button>
-                  <button>삭제</button>
+                  {userInfo.id === post.usersId && (
+                    <>
+                      <Link href={`/post/modify/${post.id}`}>
+                        <button>수정</button>
+                      </Link>
+                      <button>삭제</button>
+                    </>
+                  )}
                 </div>
               </li>
             ));
