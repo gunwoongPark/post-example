@@ -9,11 +9,14 @@ axiosInstance.interceptors.request.use(
   async (request) => {
     request.headers = request.headers ?? {};
 
-    if (localStorage.getItem("accessToken")) {
-      request.headers.Authorization = `bearer ${localStorage.getItem(
-        "accessToken"
-      )}`;
+    if (!(typeof window === "undefined")) {
+      if (localStorage.getItem("accessToken")) {
+        request.headers.Authorization = `bearer ${localStorage.getItem(
+          "accessToken"
+        )}`;
+      }
     }
+
     return request;
   },
   (error) => {
