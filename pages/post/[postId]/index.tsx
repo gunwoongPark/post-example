@@ -89,7 +89,7 @@ const PostDetailPage = () => {
 
   return (
     <S.Container>
-      <div>
+      <div className="post-header-container">
         <h1>{post.data.post.name}</h1>
         <div>
           {isNotNil(userInfo) && userInfo.id === post.data.post.usersId && (
@@ -100,8 +100,8 @@ const PostDetailPage = () => {
               <button onClick={() => deletePost()}>삭제</button>
             </>
           )}
-          <span className="created-date">
-            {dateFormat(post.data.post.created_at)}
+          <span className="post-created-date">
+            작성일 : {dateFormat(post.data.post.created_at)}
           </span>
         </div>
       </div>
@@ -121,6 +121,26 @@ const PostDetailPage = () => {
         />
         <button type="submit">등록</button>
       </form>
+
+      <div className="comment-container">
+        <ul>
+          {post.data.comment.map((comment: any) => (
+            <li key={comment.id}>
+              <div className="content-container">
+                <span className="comment">{comment.comment}</span>
+                <span className="comment-created-date">
+                  작성일 : {dateFormat(comment.created_at)}
+                </span>
+              </div>
+
+              <div className="button-container">
+                <button>수정</button>
+                <button>삭제</button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </S.Container>
   );
 };
@@ -164,7 +184,7 @@ const S = {
     width: 90%;
     margin: 0 auto;
 
-    div {
+    .post-header-container {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
@@ -175,7 +195,7 @@ const S = {
       }
 
       div {
-        .created-date {
+        .post-created-date {
           margin-left: 8px;
         }
       }
@@ -198,6 +218,39 @@ const S = {
       margin-top: 8px;
       textarea {
         width: 100%;
+      }
+    }
+
+    .comment-container {
+      margin-top: 16px;
+      ul {
+        li {
+          &:not(:first-child) {
+            margin-top: 8px;
+          }
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          border: 1px solid black;
+
+          .content-container {
+            display: flex;
+            justify-content: space-between;
+            .comment {
+              white-space: break-spaces;
+              margin: 8px 0 8px 8px;
+            }
+
+            .comment-created-date {
+              margin: 8px 8px 8px 0;
+            }
+          }
+
+          .button-container {
+            display: flex;
+            justify-content: flex-end;
+          }
+        }
       }
     }
   `,

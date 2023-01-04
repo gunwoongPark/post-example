@@ -12,7 +12,7 @@ const dateFormat = (date: string | Date | Moment): string => {
     return dateFormat(moment(date));
   }
 
-  return date.format("YYYY.MM.DD");
+  return date.format("YYYY.MM.DD HH:MM");
 };
 
 export default dateFormat;

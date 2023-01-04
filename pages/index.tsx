@@ -57,7 +57,7 @@ const HomePage = () => {
                 <div className="row-1">
                   <span className="post-title">{post.name}</span>
                   <span className="post-create-time">
-                    생성일 : {dateFormat(post.created_at)}
+                    작성일 : {dateFormat(post.created_at)}
                   </span>
                 </div>
               </li>
