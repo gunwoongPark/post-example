@@ -36,7 +36,7 @@ export const getStaticProps: GetStaticProps = async (
 export const getStaticPaths: GetStaticPaths = async () => {
   const res = await postApi.fetchPost({ skip: 0, take: 3 });
 
-  const paths = res.data.map((post: any) => post.id);
+  const paths = res.data.map((post: any) => ({ params: { postId: post.id } }));
 
   return {
     paths,
