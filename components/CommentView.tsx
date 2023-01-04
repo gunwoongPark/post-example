@@ -31,7 +31,7 @@ const CommentView = (props: { comment: any }) => {
   // mutation
   // deleteComment
   const { mutate: deleteComment } = useMutation(
-    (commentId: string) => commentApi.deleteComment({ commentId }),
+    () => commentApi.deleteComment({ commentId: props.comment.id }),
     {
       onSuccess: () => {
         queryClient.invalidateQueries([queryKeys.post], post.data.post.id);
@@ -45,15 +45,35 @@ const CommentView = (props: { comment: any }) => {
     }
   );
 
-  // function
-  const onClickDeleteButton = useCallback(
-    (commentId: string) => {
-      if (confirm("댓글을 삭제하시겠습니까?")) {
-        deleteComment(commentId);
-      }
-    },
-    [deleteComment]
+  // modifyComment
+  const { mutate: modifyComment } = useMutation(
+    () => commentApi.modifyComment({ commentId: props.comment.id, comment }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([queryKeys.post], post.data.post.id);
+        setIsModifyMode(false);
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          // TODO :: 추후 에러 핸들링
+          console.log(error);
+        }
+      },
+    }
   );
+
+  // function
+  const onClickDeleteButton = useCallback(() => {
+    if (confirm("댓글을 삭제하시겠습니까?")) {
+      deleteComment();
+    }
+  }, [deleteComment]);
+
+  const onClickSaveButton = useCallback(() => {
+    if (confirm("댓글을 수정하시겠습니까?")) {
+      modifyComment();
+    }
+  }, [modifyComment]);
 
   return (
     <S.Container>
@@ -67,7 +87,7 @@ const CommentView = (props: { comment: any }) => {
             />
             <div className="modify-button-container">
               <button onClick={() => setIsModifyMode(false)}>취소</button>
-              <button>저장</button>
+              <button onClick={() => onClickSaveButton()}>저장</button>
             </div>
           </>
         ) : (
@@ -83,9 +103,7 @@ const CommentView = (props: { comment: any }) => {
               <>
                 <div className="button-container">
                   <button onClick={() => setIsModifyMode(true)}>수정</button>
-                  <button onClick={() => onClickDeleteButton(props.comment.id)}>
-                    삭제
-                  </button>
+                  <button onClick={() => onClickDeleteButton()}>삭제</button>
                 </div>
               </>
             )}
