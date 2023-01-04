@@ -8,7 +8,7 @@ import userApi from "../../lib/api/user";
 import { queryKeys } from "../../react-query/queryKeys";
 import { isBlank } from "../../util/blank";
 
-type UpdateType = "EMAIL" | "USERNAME" | "PASSWORD";
+type ModifyType = "EMAIL" | "USERNAME" | "PASSWORD";
 
 const MyPage = () => {
   // router
@@ -32,16 +32,16 @@ const MyPage = () => {
   }, [userInfo]);
 
   // mutation
-  // updateUser
-  const { mutate: updateUser, isLoading: isUpdateLoading } = useMutation(
-    (updateType: UpdateType) => {
-      switch (updateType) {
+  // modifyUser
+  const { mutate: modifyUser, isLoading: isModifyLoading } = useMutation(
+    (modifyType: ModifyType) => {
+      switch (modifyType) {
         case "EMAIL":
-          return userApi.updateUser({ email });
+          return userApi.modifyUser({ email });
         case "USERNAME":
-          return userApi.updateUser({ username });
+          return userApi.modifyUser({ username });
         case "PASSWORD":
-          return userApi.updateUser({ password });
+          return userApi.modifyUser({ password });
       }
     },
     {
@@ -77,12 +77,12 @@ const MyPage = () => {
   );
 
   // function
-  const updateHandler = useCallback(
-    (updateType: UpdateType) => {
+  const modifyHandler = useCallback(
+    (modifyType: ModifyType) => {
       if (confirm("회원정보를 수정하시겠습니까?")) {
-        updateUser(updateType);
+        modifyUser(modifyType);
       } else {
-        switch (updateType) {
+        switch (modifyType) {
           case "EMAIL":
             setEmail(userInfo.email);
             break;
@@ -95,10 +95,10 @@ const MyPage = () => {
         }
       }
     },
-    [updateUser, userInfo]
+    [modifyUser, userInfo]
   );
 
-  if (isUpdateLoading || isDeleteLoading) {
+  if (isModifyLoading || isDeleteLoading) {
     <p>Loading...</p>;
   }
 
@@ -114,7 +114,7 @@ const MyPage = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
           <button
-            onClick={() => updateHandler("EMAIL")}
+            onClick={() => modifyHandler("EMAIL")}
             disabled={isBlank(email)}
           >
             변경
@@ -132,7 +132,7 @@ const MyPage = () => {
             onChange={(e) => setUsername(e.target.value)}
           />
           <button
-            onClick={() => updateHandler("USERNAME")}
+            onClick={() => modifyHandler("USERNAME")}
             disabled={isBlank(username)}
           >
             변경
@@ -151,7 +151,7 @@ const MyPage = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button
-            onClick={() => updateHandler("PASSWORD")}
+            onClick={() => modifyHandler("PASSWORD")}
             disabled={isBlank(password)}
           >
             변경

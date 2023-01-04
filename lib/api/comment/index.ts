@@ -20,6 +20,7 @@ const commentApi = {
     apiBase.delete(`/comments/${commentId}`),
 
   /**
+   * 댓글 수정
    * @param  {} {commentId
    * @param  {ModifyCommentReq} comment}
    * @returns Promise

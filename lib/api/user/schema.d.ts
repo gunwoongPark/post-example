@@ -9,7 +9,7 @@ export interface SignInReq {
   password: string;
 }
 
-export interface UpdateUserReq {
+export interface ModifyUserReq {
   email?: string;
   password?: string;
   username?: string;

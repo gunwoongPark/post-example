@@ -1,5 +1,5 @@
 import apiBase from "..";
-import { SignInReq, SignUpReq, UpdateUserReq } from "./schema";
+import { ModifyUserReq, SignInReq, SignUpReq } from "./schema";
 
 const userApi = {
   /**
@@ -38,10 +38,10 @@ const userApi = {
    * 유저 정보 수정
    * @param  {} {email
    * @param  {} password
-   * @param  {UpdateUserReq} username}
+   * @param  {ModifyUserReq} username}
    * @returns Promise
    */
-  updateUser: ({ email, password, username }: UpdateUserReq): Promise<any> =>
+  modifyUser: ({ email, password, username }: ModifyUserReq): Promise<any> =>
     apiBase.patch("/users", { email, password, username }),
 
   /**
