@@ -1,5 +1,5 @@
 import apiBase from "..";
-import { SaveCommentReq } from "./schema";
+import { DeleteCommentReq, ModifyCommentReq, SaveCommentReq } from "./schema";
 
 const commentApi = {
   /**
@@ -10,6 +10,22 @@ const commentApi = {
    */
   saveComment: ({ boardId, comment }: SaveCommentReq): Promise<any> =>
     apiBase.post("/comments", { boardId, comment }),
+
+  /**
+   * 댓글 삭제
+   * @param  {DeleteCommentReq} {commentId}
+   * @returns Promise
+   */
+  deleteComment: ({ commentId }: DeleteCommentReq): Promise<any> =>
+    apiBase.delete(`/comments/${commentId}`),
+
+  /**
+   * @param  {} {commentId
+   * @param  {ModifyCommentReq} comment}
+   * @returns Promise
+   */
+  modifyComment: ({ commentId, comment }: ModifyCommentReq): Promise<any> =>
+    apiBase.patch(`/comments/${commentId}`, { comment }),
 };
 
 export default commentApi;
