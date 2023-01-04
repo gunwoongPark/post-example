@@ -21,7 +21,7 @@ const postApi = {
     apiBase.post("/boards", { name, content }),
 
   /**
-   *
+   * 게시글 삭제
    * @param  {DeletePostReq} {boardId}
    * @returns Promise
    */

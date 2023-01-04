@@ -1,8 +1,13 @@
-import { isNil } from "lodash";
+import axios from "axios";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRef } from "react";
-import { dehydrate, QueryClient } from "react-query";
+import {
+  dehydrate,
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "react-query";
 import styled from "styled-components";
 import useIntersectionObserver from "../hooks/custom/useIntersectionObserver";
 import usePost from "../hooks/react-query/usePost";
@@ -14,12 +19,20 @@ import dateFormat from "../util/date";
 import { isNotNil } from "../util/nil";
 
 const HomePage = () => {
+  const queryClient = useQueryClient();
+
   // ref
   const targetRef = useRef<HTMLDivElement>(null);
 
   const { userInfo } = useUser();
-  const { postList, isLoading, hasNextPage, fetchNextPage } = usePost();
+  const {
+    postList,
+    isLoading: isPostLoading,
+    hasNextPage,
+    fetchNextPage,
+  } = usePost();
 
+  // InfScroll
   const handleObserver = (entries: IntersectionObserverEntry[]) => {
     if (!hasNextPage) {
       return;
@@ -31,7 +44,25 @@ const HomePage = () => {
   };
   useIntersectionObserver({ callback: handleObserver, ref: targetRef });
 
-  if (isLoading) {
+  // mutation
+  // deletePost
+  const { mutate: deletePost, isLoading: isDeleteLoading } = useMutation(
+    (postId: string) => postApi.deletePost({ boardId: postId }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(queryKeys.post);
+        alert("게시글을 삭제했습니다.");
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          // TODO :: 추후 에러 핸들링
+          console.log(error);
+        }
+      },
+    }
+  );
+
+  if (isPostLoading || isDeleteLoading) {
     return <p>Loading...</p>;
   }
 
@@ -60,7 +91,7 @@ const HomePage = () => {
                       <Link href={`/post/modify/${post.id}`}>
                         <button>수정</button>
                       </Link>
-                      <button>삭제</button>
+                      <button onClick={() => deletePost(post.id)}>삭제</button>
                     </>
                   )}
                 </div>

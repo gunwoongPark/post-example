@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import useUser from "../../hooks/react-query/useUser";
 import userApi from "../../lib/api/user";
+import { queryKeys } from "../../react-query/queryKeys";
 import { isBlank } from "../../util/blank";
 
 type UpdateType = "EMAIL" | "USERNAME" | "PASSWORD";
@@ -44,7 +45,7 @@ const MyPage = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("user");
+        queryClient.invalidateQueries(queryKeys.user);
         alert("업데이트 완료");
       },
       onError: (error) => {
